@@ -1,0 +1,11 @@
+
+f=list.files("./grass")
+f1 <- paste("./grass/",f,sep="")
+reduce_res <- function(f){
+  #test_image <- image_load("./grass/")
+  for (i in f){
+    img <- readJPEG(f[i])
+    img_noise <- img + rnorm(length(img), sd=0.8) # add random noise
+    noise_vec[i] <- writeJPEG(img_noise, target=raw())
+  }
+}
