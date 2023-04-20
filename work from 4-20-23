@@ -1,0 +1,63 @@
+#imager
+#blurring an image
+im <- load.image("./grass/grass4-1827308268.jpg")
+im2 <- load.image("./dandelions/636597665741397587-dandelion-1097518082.jpg")
+
+#imager
+#blurring an image
+im <- load.image("./grass/grass4-1827308268.jpg")
+im2 <- load.image("./dandelions/636597665741397587-dandelion-1097518082.jpg")
+
+plot(im2) #Parrots!
+im.blurry <- isoblur(im2,100) #Blurry parrots!
+plot(im.blurry)
+
+#edges in the x axis
+im.xedges <- deriche(im2,2,order=2,axis="x") #Edge detector along x-axis
+plot(im.xedges)
+
+#edges in the y axis
+im.yedges <- deriche(im,2,order=2,axis="y") #Edge detector along y-axis
+plot(im.yedges)
+
+#blurring across many levels
+blur.layers <- map_il(seq(1,15,l=5),~ isoblur(im2,.))
+
+blur.layers %>% parmax %>% plot(main="Max across blur levels")
+blur.layers %>% parmed %>% plot(main="Median across blur levels")
+
+#color channels (this one sets green and blue to zero to get red image)
+parrots.cp <- im2
+G(parrots.cp) <- 0
+B(parrots.cp) <- 0
+plot(parrots.cp)
+
+#adding noise
+im2.noisy <- (im2 + .5*rnorm(prod(dim(im2)))) 
+layout(t(1:2))
+plot(im2.noisy,main="Original") #this one has more noise
+isoblur(im2.noisy,5) %>% plot(main="Blurred")
+
+
+#rescale
+img <- readJPEG("636597665741397587-dandelion-1097518082.jpg")
+resizePixels <- function(image, w=150,h=150){
+  pixels <- as.vector(image)
+  #initial width/height
+  w1 = nrow(image)
+  h1 = ncol(image)
+  #create empty vector
+  temp <- vector('numeric', w*h)
+  #compute ratios
+  x_ratio <- w1/w
+  y_ratio <- h1/h
+  #resizing
+  for (i in 0: (h-1)) {
+    for (j in 0: (w-1)) {
+      px <- floor(j*x_ratio)
+      py <- floor(i*y_ratio)
+      temp[(i*w)+j] <- pixels[(py*w1)+px]
+    }
+  }
+  image <- matrix(temp,h,w)
+}
