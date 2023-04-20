@@ -1,0 +1,16 @@
+#DOES NOT WORK RIGHT NOW
+#rotation image
+img <- load.image("Dandelion+Pictures9-1654859321.jpg")
+img_rotated <- rotate(img, angle = 45) # rotate by 45 degrees
+save.image(img_rotated, "Dandelion+Pictures9-1654859321_rotated.jpg")
+
+#attempt 2
+img <- load.image(".jpg")
+     # Define the transformation matrix for a 45 degree counterclockwise rotation
+theta <- pi/4
+M <- matrix(c(cos(theta), sin(theta), 0,
+              -sin(theta), cos(theta), 0), ncol = 3)
+img_rotated <- affine(img, matrix = M)
+save.image(img_rotated, "Dandelion+Pictures9-1654859321_rotated.jpg")
+
+#DOES NOT WORK RIGHT NOW
