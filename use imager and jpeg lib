@@ -1,0 +1,13 @@
+#colorized testing
+
+# Read in the image file
+img <- load.image("Dandelion+Pictures9-1654859321.jpg")
+
+# Convert the image to grayscale
+img_gray <- grayscale(img)
+
+# Convert the images to matrices
+img_gray_matrix <- as.matrix(img_gray)
+
+# Save the grayscale and colorized images as new files
+writeJPEG(img_gray_matrix, "Dandelion+Pictures9-1654859321_gray.jpg")
