@@ -32,7 +32,7 @@ occlude <- function(bob){
   bob[occluded_pix] <- 0
   return(bob)
 }
-
+## if we want to use imager functions, use as.cimg, then as.cimg(cimg) at the end to convert back
 
 setwd("C:/Users/grant/Downloads/model/dandelion_model")
 model<-load_model_tf("C:/Users/grant/Downloads/model/dandelion_model")
