@@ -8,6 +8,6 @@ budget <- floor(numPix/100)
 occluded_pix <- sample(numPix, budget)
 bob[occluded_pix] <- 000
 pred <- model %>% predict(bob)
-if(pred[1,1]<0.50){
+if(pred[1,2]<0.50){
   print(g)
 }
