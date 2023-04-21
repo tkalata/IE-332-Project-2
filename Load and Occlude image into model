@@ -1,7 +1,6 @@
 g <- "C:/Users/Grant/Downloads/model/dandelion_model/grass/Grass_closeup-294625982.jpg"
 bob <- load.image(g)
 bob <- resize(bob, size_y=224, size_z=224, size_x = 1, size_c = 3)
-bob2 <- bob
 dims <- dim(bob)
 numPix <- dims[3] * dims[4]
 budget <- floor(numPix/100)
