@@ -29,7 +29,7 @@ occlude <- function(bob){
   budget <- floor(numPix/100)
   #make code that adds random pixels spaced out at pixel budget
   occluded_pix <- sample(numPix, budget)
-  bob[occluded_pix] <- 
+  bob[occluded_pix] <- 0
   return(bob)
 }
 
