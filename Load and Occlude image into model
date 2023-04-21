@@ -1,13 +1,79 @@
-g <- "C:/Users/Grant/Downloads/model/dandelion_model/grass/Grass_closeup-294625982.jpg"
-bob <- load.image(g)
-bob <- resize(bob, size_y=224, size_z=224, size_x = 1, size_c = 3)
-dims <- dim(bob)
-numPix <- dims[3] * dims[4]
-budget <- floor(numPix/100)
-#make code that adds random pixels spaced out at pixel budget
-occluded_pix <- sample(numPix, budget)
-bob[occluded_pix] <- 000
-pred <- model %>% predict(bob)
-if(pred[1,2]<0.50){
-  print(g)
+install_tensorflow(extra_packages="pillow")
+install_keras()
+
+library(tidyverse)
+library(keras)
+library(tensorflow)
+library(reticulate)
+
+library(imager)
+
+
+#angelica test
+#rotation install
+#install.packages("imager")
+#rotation lib
+#library(imager)
+
+#rotation image
+#img <- load.image("Dandelion+Pictures9-1654859321.jpg")
+#img_rotated <- rotate(img, angle = 45) # rotate by 45 degrees
+#save.image(img_rotated, "Dandelion+Pictures9-1654859321_rotated.jpg")
+#readJPEG
+
+
+#occlude function
+occlude <- function(bob){
+  dims <- dim(bob)
+  numPix <- dims[2] * dims[3]
+  budget <- floor(numPix/100)
+  #make code that adds random pixels spaced out at pixel budget
+  occluded_pix <- sample(numPix, budget)
+  bob[occluded_pix] <- 
+  return(bob)
 }
+
+
+setwd("C:/Users/grant/Downloads/model/dandelion_model")
+model<-load_model_tf("C:/Users/grant/Downloads/model/dandelion_model")
+
+res=c("","")
+f=list.files("./grass")
+for (i in f){
+  test_image <- image_load(paste("./grass/",i,sep=""),
+                           target_size = c(224,224))
+  
+  x <- image_to_array(test_image)
+  x <- array_reshape(x, c(1, dim(x)))
+  x <- x/255
+  x <- occlude(x)
+  pred <- model %>% predict(x)
+  if(pred[1,2]<0.50){
+    print(i)
+  }
+}
+
+res=c("","")
+f=list.files("./dandelions")
+for (i in f){
+  test_image <- image_load(paste("./dandelions/",i,sep=""),
+                           target_size = c(224,224))
+  x <- image_to_array(test_image)
+  
+  x <- array_reshape(x, c(1, dim(x)))
+  
+  x <- x/255
+  
+  x <- occlude(x)
+  
+  pred <- model %>% predict(x)
+  if(pred[1,1]<0.50){
+    print(i)
+  }
+}
+print(res)
+
+
+
+
+
