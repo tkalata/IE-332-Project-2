@@ -110,35 +110,74 @@ Accountable together -- we are Purdue.''}
 % BEGIN YOUR ASSIGNMENT HERE:
 \newpage
 \section{Introduction}
+%Overview of the project and the required algorithms
+%angelica
 
+\section{Purpose of Image Classifiers}
+%applications of image classifiers and why they benefit different industries
+%alex
 
+\section{Adversary Attacks}
+%explain why these attacks can be dangerous
+%taylor
+As mentioned above, image classifiers can be a helpful technological advance in a variety of industries. However, these classifier models can be very susceptible to adversarial attacks due to their brittle nature (PureAI Editors, 2021). Slightly changing pixels of images can completely change the model result. A simple binary image classifier to detect a dandelion will probably not be a target of an attack in the real world. But when we look at industries like medical, military, financial, security, etc, the effects of a faulty model can have serious consequences. Not only can these attacks cause incorrect classification but also doing so with reported high confidence in its prediction. For example, adversary attacks can be very dangerous with the emerging presence of self-driving cars. The "sight" of the car is made possible through deep neural networks that make up the model to classify different objects the car encounters. When the model is under attack, it can cause images to be classified incorrectly leading to accidents and injury. The self-driving car may identify a stop sign as a speed limit sign; graffiti could be identified as a person or animal in the road; another car could be mistaken for an open road. These are just some of many ways an adversary attack could potentially harm humans. It can especially be dangerous due to the fact the humans do not see any potential threat. If people are not aware of these possible attacks and their implications, it is easy to trust the models and not think twice about incorrect classifications. 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.75\textwidth, height=5cm]{car_accident.png}
+\caption{Adversarial Attack Effect}
+\label{fig:figure2}
+\end{center}
+\end{figure}
 
+Because of the potential danger in many industries, defense against these attacks is being researched heavily (Wiggers, 2021). One way involves modifying a model to respond to input triggers that are used in these attacks. Researchers are implementing a Trojan horse method to test the effectiveness of their defense tactics. This allows them to better understand how the model reacts to attacks and what modifications will benefit the robustness of the neural networks. This method provides a basis for further research and techniques to boost model security. Increasing the reliability of these image classifiers will allow different fields to safely implement them to elevate the ability of machines in industry practice.
 
+\section{Algorithm explanations}
+%explain each algorithm goal/how it works
 
-
-
-
-
-
+\section{Efficiency trade-off}
+%general discussion of efficiency vs quality inverse relationship
+% Grant
 
 
     
 \newpage
 \section{References}
+\begin{verbatim}
+Editors01/05/2021, P. A. I. (n.d.). Defending machine learning image classification modelsfrom attacks. Pure AI. Retrieved April 23, 2023, from 
+https://pureai.com/articles/2021/01/05/defending-model-attacks.aspx#:~:text=However%2C%20it%20has%20been%20known%20for%20several%20years,the%20image%20is%20completely%20misclassified%20by%20the%20model.   
+
+Wiggers, K. (2021, May 29). Adversarial attacks in machine learning: What they are and how to stop them. VentureBeat. Retrieved April 23, 2023, from https://venturebeat.com/security/adversarial-attacks-in-machine-learning-what-they-are-and-how-to-stop-them/ 
+\end{verbatim}
+
 \begin{thebibliography}{4}
 
 \end{thebibliography}
 
 \section{Appendix}
-\subsection{Testing/Correctness/Verfication}
+\subsection{Testing/Correctness/Verification}
+%correctness proofs of loops
+%results of algorithms
 
 \subsection{Runtime complexity/Walltime}
+%explanation of how to calculate runtime
+%runtime for each algorithm
+%walltime is actual time it takes to run, explain difference
+%sam
 
 \subsection{Performance}
+%before and after pictures
+
+
+
 
 \subsection{Algorithm Justification}
+%why we selected each algorithm 
+%what the weightings would be when combined into 1 algorithm
 
-
-
+%\begin{figure}[h]
+%\centering
+%\subfigure[Figure 1: Label 1]{\includegraphics[width=0.4\linewidth]{picture_1.png}}
+%\subfigure[Figure 2: Label 2]{\includegraphics[width=0.4\linewidth]{picture_2.png}}
+%\end{figure}
 
 \end{document}
