@@ -115,7 +115,7 @@ Accountable together -- we are Purdue.''}
 
 Machine learning enables the development of complex models to learn from data and perform various tasks such as image classification. Image classification is where a model learns to recognize and categorize images into different classes. Although, with any technology, machine learning algorithms are not immune to attacks.
 
-Adversarial attacks have been developed to fool machine learning models by making small, changes to the input data, which cause the model to misclassify the image. Adversarial attacks can be used to test the robustness of machine learning models and can also be used to deceive and manipulate models in the real world. 
+Adversarial attacks have been developed to fool machine learning models by making small, changes to the input data, which cause the model to incorrectly classify the image. Adversarial attacks can be used to test the robustness of machine learning models and can also be used to deceive and manipulate models in the real world. 
 
 In this project, we aimed to train a voting-based optimization algorithm to perform adversarial attacks on a binary image classifier. We used five different machine learning algorithms to fool the classifier, and placed them within another algorithm that assigns weights to them based on their expected performance given the image.
 
@@ -150,9 +150,16 @@ Because of the potential danger in many industries, defense against these attack
 \section{Algorithm explanations}
 %explain each algorithm goal/how it works
 
+%need to ask Lucas how to interpret the results of running the test loop
+%occlude function does not trick or lower accuracy as of now
+%blurry function does not trick but lowers accuracy
+%add noise function does not trick but lowers accuracy (have ti add isoblur to it though)
+%color function drastically lowers accuracy percentage for dandelion pictures but not grass
+
 \section{Efficiency trade-off}
 %general discussion of efficiency vs quality inverse relationship
 % Grant
+
 
 
     
