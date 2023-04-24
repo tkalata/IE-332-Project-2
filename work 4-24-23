@@ -1,0 +1,52 @@
+library(tidyverse)
+library(keras)
+library(tensorflow)
+library(reticulate)
+
+install_tensorflow(extra_packages="pillow")
+install_keras()
+
+install.packages('imager')
+library(imager)
+
+
+setwd("C:/Users/15135/Downloads/IE332 Project 2")
+model<-load_model_tf("./dandelion_model")
+
+## ORIGINAL MODEL
+res=c("","")
+f=list.files("./grass")
+for (i in f){
+  test_image <- image_load(paste("./grass/",i,sep=""),
+                           target_size = c(224,224))
+  x <- image_to_array(test_image)
+  x <- array_reshape(x, c(1, dim(x)))
+  x <- x/255
+  
+  pred <- model %>% predict(x)
+  if(pred[1,2]<0.50){
+    print(i)
+  }
+  print(pred)
+}
+
+
+## TRYING NEW FUNCTION
+res=c("","")
+f=list.files("./dandelions")
+for (i in f){
+  test_image <- image_load(paste("./dandelions/",i,sep=""),
+                           target_size = c(224,224))
+  x <- image_to_array(test_image)
+  x <- array_reshape(x, c(1, dim(x)))
+  x <- x/255
+  x <- addnoise(x)
+  pred <- model %>% predict(x)
+  if(pred[1,1]<0.50){
+    print(i)
+  }
+  print(pred)
+}
+print(res)
+
+
