@@ -1,0 +1,179 @@
+#PACKAGE INSTALLATION
+
+#install.packages("keras")
+#install.packages()
+
+library(tidyverse)
+library(keras)
+library(tensorflow)
+library(reticulate)
+#install_tensorflow(extra_packages="pillow")
+#install_keras()
+
+#DEFINE MODEL
+model<-load_model_tf("./dandelion_model")
+
+
+#ALGORITHMS
+
+#noise install
+#install.packages("jpeg")
+install.packages("magick")
+install.packages("imager")
+
+#noise lib
+library(jpeg)
+library(magick)
+library(imager)
+
+
+#reduce res
+
+#img <- readJPEG("636597665741397587-dandelion-1097518082.jpg")
+#img_noise <- img + rnorm(length(img), sd=0.8) # add random noise
+#writeJPEG(img_noise, "636597665741397587-dandelion-1097518082_noisy.jpg")
+
+f=list.files("./grass")
+f1 <- paste("./grass/",f,sep="")
+reduce_res <- function(f){
+  #test_image <- image_load("./grass/")
+  for (i in f){
+    img <- readJPEG(f[i])
+    img_noise <- img + rnorm(length(img), sd=0.8) # add random noise
+    noise_vec[i] <- writeJPEG(img_noise, target=raw())
+  }
+}
+
+#inputs are messed up...
+resolution <- function(x){
+  return(x + rnorm(length(x), sd=0.8))
+}
+
+
+#rescale
+img <- readJPEG("636597665741397587-dandelion-1097518082.jpg")
+resizePixels <- function(image, w=150,h=150){
+  pixels <- as.vector(image)
+  #initial width/height
+  w1 = nrow(image)
+  h1 = ncol(image)
+  #create empty vector
+  temp <- vector('numeric', w*h)
+  #compute ratios
+  x_ratio <- w1/w
+  y_ratio <- h1/h
+  #resizing
+  for (i in 0: (h-1)) {
+    for (j in 0: (w-1)) {
+      px <- floor(j*x_ratio)
+      py <- floor(i*y_ratio)
+      temp[(i*w)+j] <- pixels[(py*w1)+px]
+    }
+  }
+  image <- matrix(temp,h,w)
+  return(image)
+}
+
+
+#imager
+#blurring an image
+im <- load.image("./grass/grass4-1827308268.jpg")
+im2 <- load.image("./dandelions/636597665741397587-dandelion-1097518082.jpg")
+
+plot(im2) #Parrots!
+im.blurry <- isoblur(im2,100) #Blurry parrots!
+plot(im.blurry)
+
+blurry <- function(x){
+  return (isoblur(x,100))
+}
+
+#edges in the x axis, does not fool model
+edges <- function(x){
+  im.xedges <- deriche(x,2,order=2,axis="x")
+  return(im.xedges)
+}
+ #Edge detector along x-axis
+plot(im.xedges)
+
+#edges in the y axis
+im.yedges <- deriche(im,2,order=2,axis="y") #Edge detector along y-axis
+plot(im.yedges)
+
+#blurring across many levels
+blur.layers <- map_il(seq(1,15,l=5),~ isoblur(im2,.))
+
+blur.layers %>% parmax %>% plot(main="Max across blur levels")
+blur.layers %>% parmed %>% plot(main="Median across blur levels")
+
+
+#color channels (this one sets green and blue to zero to get red image)
+parrots.cp <- im2
+G(parrots.cp) <- 0
+B(parrots.cp) <- 0
+plot(parrots.cp)
+
+color <- function(x){
+  G(x) <- 0
+  B(x) <- 0
+  return(x)
+}
+
+#adding noise
+im2.noisy <- (im2 + .5*rnorm(prod(dim(im2)))) 
+layout(t(1:2))
+plot(im2.noisy,main="Original") #this one has more noise
+isoblur(im2.noisy,5) %>% plot(main="Blurred")
+
+addNoisy <- function(x){
+  im.noise <- x + .5*rnorm(prod(dim(x)))
+  isoblur(im.noise,50)
+}
+
+#occlude code
+occlude <- function(bob){
+  dims <- dim(bob)
+  numPix <- dims[2] * dims[3]
+  budget <- floor(numPix/100)
+  #make code that adds random pixels spaced out at pixel budget
+  occluded_pix <- sample(numPix, budget)
+  bob[occluded_pix] <- 0
+  return(bob)
+}
+
+
+
+#TESTING
+res=c("","")
+f=list.files("./grass")
+for (i in f){
+  test_image <- image_load(paste("./grass/",i,sep=""),
+                           target_size = c(224,224))
+  x <- image_to_array(test_image)
+  x <- array_reshape(x, c(1, dim(x)))
+  x <- x/255
+  x <- color(x)
+  pred <- model %>% predict(x)
+  if(pred[1,2]<0.50){
+    print(i)
+  }
+  print(pred[2])
+}
+
+
+res=c("","")
+f=list.files("./dandelions")
+for (i in f){
+  test_image <- image_load(paste("./dandelions/",i,sep=""),
+                           target_size = c(224,224))
+  x <- image_to_array(test_image)
+  x <- array_reshape(x, c(1, dim(x)))
+  x <- x/255
+  x <- color(x)
+  pred <- model %>% predict(x)
+  if(pred[1,1]<0.50){
+    print(i)
+  }
+  print(pred[2])
+}
+print(res)
