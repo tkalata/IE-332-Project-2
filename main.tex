@@ -149,6 +149,31 @@ Because of the potential danger in many industries, defense against these attack
 
 \section{Algorithm explanations}
 %explain each algorithm goal/how it works
+%why you picked it (fast time, accuracy, etc)
+% loop invarient & runtime complexity -> IN APPENDIX, NOT THIS SECTION
+
+
+% selecting each of the 5 machine learning algorithms: how you trained them, and how your optimizer allocates the votes, and why such an approach should work
+
+% Angelica - Deep Fool
+
+%Alex - FGSM
+
+%Taylor - BIM
+\tab Another algorithm we researched was the Basic Iterative Method (BIM). This is an extension of the Fast Gradient Sign Method (FGSM) explained above (NueralCeption, 2023). This algorithm applies FGSM multiple times to an image with a specified step size $\alpha$, where $\alpha$ is chosen to be the intensity of one pixel. Another parameter of BIM is $\epsilon$, which limits the adversarial pertubance. This means that a maximum is set to the amount of change each selected pixel endures. The number of iterations depends on the maximum perturbance $\epsilon$ and the step size $\alpha$ to reach the maximum. This iterative approach changes the image pixels every time the FGSM algorithm is run in opposition of the orginal FGSM single large step. The attack function is passed the mean of the data, the standard deviation of the data, the model to attack, the related images, the labels from the images, epsilon, alpha, and the number of iterations. The function starts by converting the image labels to a multi-dimensional matrix of a consistent data type. We then initialize the attacked image as the orginal image that has been passed to the function input. The algorithm then normalizes epsilon, alpha, and the range based on mean and standard deviation of the function. The normalization converts the inputs to tensors, which are the multidimensional matrices that is the data type needed to perform operations with the images to be attacked. Once the maximum change in pixel value is calculated using $\epsilon$, the iterations of FGSM can begin over the specified number of iterations (Ansah, 2023). Each iteration of the loop with calculate the gradient with respect to the image pixels. Then it will slightly adjust the pixels toward the gradient to maximize loss between the original and attacked image. Again, this done over again for each iteration by the step size $\alpha$. Because the FGSM process is repeated many times, the BIM algorithm is going to perform slower. However, this method tends to be more successful in tricking neural network models. It also can provide more subtle changes to the images to go unnoticed by the human eye. Section 5 of our report dives further into the efficiency trade-off dilemma experienced here.
+
+
+%Grant - Particle Swarm
+
+%Sam - Simulated Annealing 
+
+%%%%% what we did instead %%%%%
+
+%Taylor - blur and color change "algorithm"
+\tab Because of the course load and time constraints of this project, we were not able to fully implement the adversary attack algorithms that are explained above. In addition to these algorithms, we researched R functions to change the appearance of images in order to fool the given model. We were able to isotropically blur the images with a certain standard deviation of the blur. As the image is blurred, the model is not always able to tell the contrast between the dandelion and surrounding grass, causing it to incorrectly classify the image. We also implemented a function to alter the image color channels. Since the grass and dandelion pictures obviously have a distinction in having the color yellow or not, changing color channels can aid in fooling the given model. By setting the green and blue channels to zero, the red channel is left. The attacked images then lack the zeroed channels, and the model has to focus on other image characteristics rather than the obvious color differences. Performance and effects can be found in the report Appendix.
+
+
+%Angelica - grayscale
 
 %need to ask Lucas how to interpret the results of running the test loop
 %occlude function does not trick or lower accuracy as of now
@@ -158,8 +183,8 @@ Because of the potential danger in many industries, defense against these attack
 
 \section{Efficiency trade-off}
 %general discussion of efficiency vs quality inverse relationship
-% Grant
-
+A Central Processing Unit (CPU) has a limit on how many calculations it is able to perform in a certain time frame. Therefore, the speed of every computer is limited and the runtime of each algorithm should be considered. The more operations that occur, the longer it will take for the algorithm to execute. If an algorithm is higher quality, it typically will be more complex and will therefore take more resources. However, if an algorithm is less complex, it typically will require fewer steps and take less time. In other words, an efficient algorithm may be less accurate and an accurate algorithm may be less efficient.
+However, this may not be the case in all instances, such as in machine learning. In these cases, if one were to over train an algorithm on a training data set, the process of creating the model would be less efficient as training takes time and resources. In addition to that, the model would be of lower quality as it would be tailored too much on training data and would struggle to model testing data.
 
 
     
@@ -174,6 +199,10 @@ Wiggers, K. (2021, May 29). Adversarial attacks in machine learning: What they a
 Boesch, G. (2023, February 24). A complete guide to Image Classification in 2023. viso.ai. Retrieved April 24, 2023, from https://viso.ai/computer-vision/image-classification/#:~:text=Image%20Classification%20is%20the%20Basis%20of%20Computer%20Vision,-The%20field%20of&text=It%20forms%20the%20basis%20for,%2C%20machine%20vision%2C%20and%20more. 
 
 What is Computer Vision? Microsoft Azure. (2023). Retrieved April 24, 2023, from https://azure.microsoft.com/en-us/resources/cloud-computing-dictionary/what-is-computer-vision/#:~:text=Computer%20vision%20is%20a%20field,tasks%20that%20replicate%20human%20capabilities. 
+
+Basic iterative method. NeuralCeption. (2023, April 25). Retrieved April 25, 2023, from https://www.neuralception.com/adversarialexamples-bim 
+
+Ansah, H. (2023, April 21). Adversarial attacks on neural networks: Exploring the fast gradient sign method. neptune.ai. Retrieved April 25, 2023, from https://neptune.ai/blog/adversarial-attacks-on-neural-networks-exploring-the-fast-gradient-sign-method 
 \end{verbatim}
 
 \begin{thebibliography}{4}
@@ -181,9 +210,23 @@ What is Computer Vision? Microsoft Azure. (2023). Retrieved April 24, 2023, from
 \end{thebibliography}
 
 \section{Appendix}
+% Per the document: include Testing/Correctness/Verification $(1 section), Runtime Complexity and Walltime (1 section), Performance (according to the aforementioned criterion), and justification for the algorithm selected in your final implementation out of the set of implementations you tested
+
 \subsection{Testing/Correctness/Verification}
-%correctness proofs of loops
-%results of algorithms
+%correctness proofs of loops from psuedocode found online (you can include the pictures)
+
+
+
+% Angelica - Deep Fool
+
+%Alex - FGSM
+
+%Taylor - BIM
+
+%Grant - Particle Swarm
+
+%Sam - Simulated Annealing 
+
 
 \subsection{Runtime complexity/Walltime}
 %explanation of how to calculate runtime
@@ -194,15 +237,29 @@ To calculate runtime for an algorithm, we first identify the number of operation
 We then combine the weights, or number of operations, and multiply that by the mathematical expression that represents the time complexity.
 \newline \newline Walltime is a term that represents the real-time of an algorithm, in a linear sense. Start to stop, for simpler terms. Runtime, on the other hand, refers to the time it takes to execute the code or instructions, excluding the idle and/or waiting time. 
 
+% Angelica - Deep Fool
+
+%Alex - FGSM
+
+%Taylor - BIM
+
+
+%Grant - Particle Swarm
+
+%Sam - Simulated Annealing 
+
 \subsection{Performance}
 %before and after pictures
 
+%Taylor - outcome of testing blurry and color
+
+%Angelica - outcome of testing grayscale
 
 
+\subsection{Combining Weights}
 
-\subsection{Algorithm Justification}
-%why we selected each algorithm 
 %what the weightings would be when combined into 1 algorithm
+
 
 %\begin{figure}[h]
 %\centering
@@ -211,3 +268,7 @@ We then combine the weights, or number of operations, and multiply that by the m
 %\end{figure}
 
 \end{document}
+
+
+
+%\https://www.sciencedirect.com/science/article/pii/S1077314298906750
