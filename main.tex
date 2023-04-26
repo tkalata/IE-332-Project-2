@@ -165,6 +165,7 @@ Specifically, the algorithm 1, was used from (Moosavi-Dezfooli,2016).
 The pseudo-code of the algorithm, consists of a loop that computes the minimum perturbation vector required to cross the decision boundary and generates a new adversarial example by moving the input image by a small amount in the direction of the perturbation vector. The loop continues until an adversarial example is found, or until the max number of iterations is reached.
 
 %Alex - FGSM
+\tab Another algorithm we researched was the Fast Gradient Sign Method or FGSM. This attack was chosen because it is a fast, single-step attack with low computational complexity (Chan, n.d.). Given the run-time constraints of this project, speed was an important factor when researching adversarial attack algorithms. The FGSM algorithm uses the sign of the gradient of the loss function with respect to the input image pixels, but in the opposite way that a typical neural network in training would. While typically the goal is to follow the direction of the gradient that minimizes loss, FGSM instead follows the direction of the gradient that maximizes loss. In other words, FGSM nudges the pixels in the direction of the gradient that maximizes the loss to trick the classifier. In the FGSM definitive equation, a value of epsilon is multiplied by the sign of the gradient of the loss which is subtracted from original image. The value of epsilon scales the amount of noise added to the image, so a higher value will result in more visually detectable defects in the image (Ansah, 2023).
 
 %Taylor - BIM
 \tab Another algorithm we researched was the Basic Iterative Method (BIM). This is an extension of the Fast Gradient Sign Method (FGSM) explained above (NueralCeption, 2023). This algorithm applies FGSM multiple times to an image with a specified step size $\alpha$, where $\alpha$ is chosen to be the intensity of one pixel. Another parameter of BIM is $\epsilon$, which limits the adversarial pertubance. This means that a maximum is set to the amount of change each selected pixel endures. The number of iterations depends on the maximum perturbance $\epsilon$ and the step size $\alpha$ to reach the maximum. This iterative approach changes the image pixels every time the FGSM algorithm is run in opposition of the orginal FGSM single large step. The attack function is passed the mean of the data, the standard deviation of the data, the model to attack, the related images, the labels from the images, epsilon, alpha, and the number of iterations. The function starts by converting the image labels to a multi-dimensional matrix of a consistent data type. We then initialize the attacked image as the original image that has been passed to the function input. The algorithm then normalizes epsilon, alpha, and the range based on mean and standard deviation of the function. The normalization converts the inputs to tensors, which are the multidimensional matrices that is the data type needed to perform operations with the images to be attacked. Once the maximum change in pixel value is calculated using $\epsilon$, the iterations of FGSM can begin over the specified number of iterations (Ansah, 2023). Each iteration of the loop with calculate the gradient with respect to the image pixels. Then it will slightly adjust the pixels toward the gradient to maximize loss between the original and attacked image. Again, this done over again for each iteration by the step size $\alpha$. Because the FGSM process is repeated many times, the BIM algorithm is going to perform slower. However, this method tends to be more successful in tricking neural network models. It also can provide more subtle changes to the images to go unnoticed by the human eye. Section 5 of our report dives further into the efficiency trade-off dilemma experienced here.
@@ -174,7 +175,7 @@ The pseudo-code of the algorithm, consists of a loop that computes the minimum p
 \tab Particle Swarm Optimization, or PSO, is an optimization technique in machine learning. In PSO, particles, acting as possible solutions, swarm around a space of solutions in order to find the optimal solution (such as the minimum or maximum). The particles here mimic the behavior of swarms of animals, such as insects or birds looking for food. Essentially, the particles work together and "communicate" with each other once a discovery is found (Tam, 2021). This algorithm is less computationally intensive than some other algorithms, does not require the problem to be differentiable, and has few hyperparameters, making it more flexible (Thevenot, 2022). The algorithm starts off with the particles being located in random locations and having a random velocity in the space. This makes this algorithm a stochastic algorithm. Over time, the particles will observe their current solution, and update their velocity based on the sum of 3 factors: their current velocity multiplied by a weight factor \textit{w}, the distance between their personal best and original location all multiplied by a constant $c_{1}$ 
 and random number  $r_{1}$, and a similar factor where the global best minus the original location is multiplied by random number $r_{2}$ and constant $c_{2}$. \textit{w}, $c_{1}$, and   $c_{2}$ are all user parameters that modify the behavior of the function (Tam, 2021). \textit{w} is the inertia weight constant, while $c_{1}$, and $c_{2}$ "are the cognitive and social coefficients, respectively" (Thevenot, 2022). The personal best and global best values are also updated with every iteration, and the hyperparameters can also be updated with each iteration if desired. Particle Swarm Optimization can also be applied to the context of adversarial attacks, (Mun et al, 2022). In essence, this is done by adding temporary particles using Genetic Algorithms (GA).
 %Sam - Simulated Annealing 
-
+\tab Our last algorithm is simulated annealing, a stochastic global optimization technique applicable to continuous and discrete variable problems. This technique numerically approximates the global optimum in the presence of large numbers of local optima. The algorithm is basically hill-climbing, but instead of picking the best move, it picks a random move. If the selected move improves the solution, then it is accepted. If the selected move does not improve the solution, the algorithm makes the move anyway with some probability less than 1. Simulated annealing is an improvement heuristic; it navigates the search space of feasible solutions by iteratively applying small perturbations by previously found solutions. () 'Annealing' is a term in thermodynamics, referring to the way metals cool and anneal. 
 
 %%%%% what we did instead %%%%%
 
@@ -235,6 +236,10 @@ Wong, E., Rice, L., &amp; Kolter, J. Z. (2020, January 12). Fast is better than 
 Pseudocode of particle swarm optimization. Research Gate. (n.d.). Retrieved April 26, 2023, from https://www.researchgate.net/figure/Pseudocode-of-Particle-Swarm-Optimization_fig1_343113703 
 
 Morgan, A., &amp; Watson, E. (2022, May 2). A review of DeepFool: A simple and accurate method to fool Deep Neural Networks. Medium. Retrieved April 26, 2023, from https://medium.com/machine-intelligence-and-deep-learning-lab/a-review-of-deepfool-a-simple-and-accurate-method-to-fool-deep-neural-networks-b016fba9e48e 
+
+Chan, S. (n.d.). Chapter 3 Adversarial Attack. Purdue University College of Engineering. Retrieved April 26, 2023, from https://engineering.purdue.edu/ChanGroup/ECE595/files/chapter3.pdf
+
+Ansah, H. (2023, April 21). Adversarial attacks on neural networks: Exploring the fast gradient sign method. neptune.ai. Retrieved April 26, 2023, from https://neptune.ai/blog/adversarial-attacks-on-neural-networks-exploring-the-fast-gradient-sign-method 
 
 
 
@@ -305,6 +310,8 @@ This is the same for Walltime. It depends on the sam factors, so it is unable to
 \tab The BIM algorithm will have a run time dependant on the FGSM run time. As seen in the figure above, BIM is composed of 2 for loops. The first loop run time will depend on the number of iterations determined from step size $\alpha$ and maximum perturbance $\epsilon$. The nested loop represents the FGSM algorithm that depends on the data set size for run time. Because of this structure, the run time complexity is in the order of $\theta$(n)=$n^2$. BIM run time will be an extension of FGSM run time by multiplying it by the number of iterations specified. 
 
 %Grant - Particle Swarm
+
+
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=0.5\textwidth, height=7.5cm]{particleswarm_algorithm.png}
@@ -312,7 +319,7 @@ This is the same for Walltime. It depends on the sam factors, so it is unable to
 \label{fig:figure2}
 \end{center}
 \end{figure}
-
+The run time of the algorithm highly depends on the number of specified iterations inputted by the user. Otherwise, 
 %Sam - Simulated Annealing 
 
 \subsection{Performance}
