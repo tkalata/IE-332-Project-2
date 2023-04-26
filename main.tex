@@ -156,24 +156,37 @@ Because of the potential danger in many industries, defense against these attack
 % selecting each of the 5 machine learning algorithms: how you trained them, and how your optimizer allocates the votes, and why such an approach should work
 
 % Angelica - Deep Fool
+\tab The first algorithm researched was DeepFool which is a method for generating adversarial examples for deep neural networks.
+The DeepFool algorithm works by iteratively perturbing an input image in the direction of the decision boundary of the model. The decision boundary is the surface that separates different classes in the feature space of the model. The algorithm calculates the minimum perturbation needed to push an input image across the decision boundary, and then moves the image in that direction. This process is repeated until the image is misclassified (Goodfellow,2015).
+
+The DeepFool algorithm was selected because of its simplicity and effectiveness in generating adversarial examples.  Another reason DeepFool was selected is because can be used to generate targeted adversarial examples, where the attacker can specify a desired target class for the misclassification.
+
+Specifically, the algorithm 1, was used from (Moosavi-Dezfooli,2016). 
+The pseudo-code of the algorithm, consists of a loop that computes the minimum perturbation vector required to cross the decision boundary and generates a new adversarial example by moving the input image by a small amount in the direction of the perturbation vector. The loop continues until an adversarial example is found, or until the max number of iterations is reached.
 
 %Alex - FGSM
 
 %Taylor - BIM
-\tab Another algorithm we researched was the Basic Iterative Method (BIM). This is an extension of the Fast Gradient Sign Method (FGSM) explained above (NueralCeption, 2023). This algorithm applies FGSM multiple times to an image with a specified step size $\alpha$, where $\alpha$ is chosen to be the intensity of one pixel. Another parameter of BIM is $\epsilon$, which limits the adversarial pertubance. This means that a maximum is set to the amount of change each selected pixel endures. The number of iterations depends on the maximum perturbance $\epsilon$ and the step size $\alpha$ to reach the maximum. This iterative approach changes the image pixels every time the FGSM algorithm is run in opposition of the orginal FGSM single large step. The attack function is passed the mean of the data, the standard deviation of the data, the model to attack, the related images, the labels from the images, epsilon, alpha, and the number of iterations. The function starts by converting the image labels to a multi-dimensional matrix of a consistent data type. We then initialize the attacked image as the orginal image that has been passed to the function input. The algorithm then normalizes epsilon, alpha, and the range based on mean and standard deviation of the function. The normalization converts the inputs to tensors, which are the multidimensional matrices that is the data type needed to perform operations with the images to be attacked. Once the maximum change in pixel value is calculated using $\epsilon$, the iterations of FGSM can begin over the specified number of iterations (Ansah, 2023). Each iteration of the loop with calculate the gradient with respect to the image pixels. Then it will slightly adjust the pixels toward the gradient to maximize loss between the original and attacked image. Again, this done over again for each iteration by the step size $\alpha$. Because the FGSM process is repeated many times, the BIM algorithm is going to perform slower. However, this method tends to be more successful in tricking neural network models. It also can provide more subtle changes to the images to go unnoticed by the human eye. Section 5 of our report dives further into the efficiency trade-off dilemma experienced here.
+\tab Another algorithm we researched was the Basic Iterative Method (BIM). This is an extension of the Fast Gradient Sign Method (FGSM) explained above (NueralCeption, 2023). This algorithm applies FGSM multiple times to an image with a specified step size $\alpha$, where $\alpha$ is chosen to be the intensity of one pixel. Another parameter of BIM is $\epsilon$, which limits the adversarial pertubance. This means that a maximum is set to the amount of change each selected pixel endures. The number of iterations depends on the maximum perturbance $\epsilon$ and the step size $\alpha$ to reach the maximum. This iterative approach changes the image pixels every time the FGSM algorithm is run in opposition of the orginal FGSM single large step. The attack function is passed the mean of the data, the standard deviation of the data, the model to attack, the related images, the labels from the images, epsilon, alpha, and the number of iterations. The function starts by converting the image labels to a multi-dimensional matrix of a consistent data type. We then initialize the attacked image as the original image that has been passed to the function input. The algorithm then normalizes epsilon, alpha, and the range based on mean and standard deviation of the function. The normalization converts the inputs to tensors, which are the multidimensional matrices that is the data type needed to perform operations with the images to be attacked. Once the maximum change in pixel value is calculated using $\epsilon$, the iterations of FGSM can begin over the specified number of iterations (Ansah, 2023). Each iteration of the loop with calculate the gradient with respect to the image pixels. Then it will slightly adjust the pixels toward the gradient to maximize loss between the original and attacked image. Again, this done over again for each iteration by the step size $\alpha$. Because the FGSM process is repeated many times, the BIM algorithm is going to perform slower. However, this method tends to be more successful in tricking neural network models. It also can provide more subtle changes to the images to go unnoticed by the human eye. Section 5 of our report dives further into the efficiency trade-off dilemma experienced here.
 
 
 %Grant - Particle Swarm
-
+\tab Particle Swarm Optimization, or PSO, is an optimization technique in machine learning. In PSO, particles, acting as possible solutions, swarm around a space of solutions in order to find the optimal solution (such as the minimum or maximum). The particles here mimic the behavior of swarms of animals, such as insects or birds looking for food. Essentially, the particles work together and "communicate" with each other once a discovery is found (Tam, 2021). This algorithm is less computationally intensive than some other algorithms, does not require the problem to be differentiable, and has few hyperparameters, making it more flexible (Thevenot, 2022). The algorithm starts off with the particles being located in random locations and having a random velocity in the space. This makes this algorithm a stochastic algorithm. Over time, the particles will observe their current solution, and update their velocity based on the sum of 3 factors: their current velocity multiplied by a weight factor \textit{w}, the distance between their personal best and original location all multiplied by a constant $c_{1}$ 
+and random number  $r_{1}$, and a similar factor where the global best minus the original location is multiplied by random number $r_{2}$ and constant $c_{2}$. \textit{w}, $c_{1}$, and   $c_{2}$ are all user parameters that modify the behavior of the function (Tam, 2021). \textit{w} is the inertia weight constant, while $c_{1}$, and $c_{2}$ "are the cognitive and social coefficients, respectively" (Thevenot, 2022). The personal best and global best values are also updated with every iteration, and the hyperparameters can also be updated with each iteration if desired. Particle Swarm Optimization can also be applied to the context of adversarial attacks, (Mun et al, 2022). In essence, this is done by adding temporary particles using Genetic Algorithms (GA).
 %Sam - Simulated Annealing 
+
 
 %%%%% what we did instead %%%%%
 
+\tab Because of the course load and time constraints of this project, we were not able to fully implement the adversary attack algorithms that are explained above. In addition to these algorithms, we researched R functions to change the appearance of images in order to fool the given model. 
 %Taylor - blur and color change "algorithm"
-\tab Because of the course load and time constraints of this project, we were not able to fully implement the adversary attack algorithms that are explained above. In addition to these algorithms, we researched R functions to change the appearance of images in order to fool the given model. We were able to isotropically blur the images with a certain standard deviation of the blur. As the image is blurred, the model is not always able to tell the contrast between the dandelion and surrounding grass, causing it to incorrectly classify the image. We also implemented a function to alter the image color channels. Since the grass and dandelion pictures obviously have a distinction in having the color yellow or not, changing color channels can aid in fooling the given model. By setting the green and blue channels to zero, the red channel is left. The attacked images then lack the zeroed channels, and the model has to focus on other image characteristics rather than the obvious color differences. Performance and effects can be found in the report Appendix.
+We were able to isotropically blur the images with a certain standard deviation of the blur. As the image is blurred, the model is not always able to tell the contrast between the dandelion and surrounding grass, causing it to incorrectly classify the image. We also implemented a function to alter the image color channels. Since the grass and dandelion pictures obviously have a distinction in having the color yellow or not, changing color channels can aid in fooling the given model. By setting the green and blue channels to zero, the red channel is left. The attacked images then lack the zeroed channels, and the model has to focus on other image characteristics rather than the obvious color differences. Performance and effects can be found in the report Appendix.
 
 
 %Angelica - grayscale
+%%%%% ask someone to help me run it through the model
+
+
 
 %need to ask Lucas how to interpret the results of running the test loop
 %occlude function does not trick or lower accuracy as of now
@@ -203,13 +216,35 @@ What is Computer Vision? Microsoft Azure. (2023). Retrieved April 24, 2023, from
 Basic iterative method. NeuralCeption. (2023, April 25). Retrieved April 25, 2023, from https://www.neuralception.com/adversarialexamples-bim 
 
 Ansah, H. (2023, April 21). Adversarial attacks on neural networks: Exploring the fast gradient sign method. neptune.ai. Retrieved April 25, 2023, from https://neptune.ai/blog/adversarial-attacks-on-neural-networks-exploring-the-fast-gradient-sign-method 
+
+H. Mun, S. Seo, B. Son and J. Yun, "Black-Box Audio Adversarial Attack Using Particle Swarm Optimization," in IEEE Access, vol. 10, pp. 23532-23544, 2022, doi: 10.1109/ACCESS.2022.3152526.
+
+Tam, A. (2021, October 11). A gentle introduction to particle swarm optimization. MachineLearningMastery.com. Retrieved April 25, 2023, from https://machinelearningmastery.com/a-gentle-introduction-to-particle-swarm-optimization/ 
+
+Thevenot, A. (2022, February 17). Particle swarm optimization visually explained. Towards Data Science. Retrieved April 25, 2023, from https://towardsdatascience.com/particle-swarm-optimization-visually-explained-46289eeb2e14 
+
+% deepfool
+Goodfellow, I. J., Shlens, J., & Szegedy, C. (2015). Explaining and harnessing adversarial examples. In International Conference on Learning Representations (ICLR).
+
+Moosavi-Dezfooli, S.-M., Fawzi, A., & Frossard, P. (2016). DeepFool: A simple and accurate method to fool deep neural networks. In Conference on Computer Vision and Pattern Recognition (CVPR) (pp. 2574-2582).
+
+TensorFlow. (n.d.). Adversarial examples. Retrieved April 25, 2023, from https://www.tensorflow.org/tutorials/generative/adversarial_fgsm
+
+Wong, E., Rice, L., &amp; Kolter, J. Z. (2020, January 12). Fast is better than free: Revisiting adversarial training. arXiv.org. Retrieved April 26, 2023, from https://arxiv.org/abs/2001.03994 
+
+Pseudocode of particle swarm optimization. Research Gate. (n.d.). Retrieved April 26, 2023, from https://www.researchgate.net/figure/Pseudocode-of-Particle-Swarm-Optimization_fig1_343113703 
+
+Morgan, A., &amp; Watson, E. (2022, May 2). A review of DeepFool: A simple and accurate method to fool Deep Neural Networks. Medium. Retrieved April 26, 2023, from https://medium.com/machine-intelligence-and-deep-learning-lab/a-review-of-deepfool-a-simple-and-accurate-method-to-fool-deep-neural-networks-b016fba9e48e 
+
+
+
 \end{verbatim}
 
 \begin{thebibliography}{4}
 
 \end{thebibliography}
 
-\section{Appendix}
+\newpage\section{Appendix}
 % Per the document: include Testing/Correctness/Verification $(1 section), Runtime Complexity and Walltime (1 section), Performance (according to the aforementioned criterion), and justification for the algorithm selected in your final implementation out of the set of implementations you tested
 
 \subsection{Testing/Correctness/Verification}
@@ -219,9 +254,13 @@ Ansah, H. (2023, April 21). Adversarial attacks on neural networks: Exploring th
 
 % Angelica - Deep Fool
 
+%cannot do correcteness // talked about loops in explanation tho
+
 %Alex - FGSM
 
 %Taylor - BIM
+\tab For the Basic Iterative Method (BIM), the loop invariant is that the adversarial image always represents the number of pixels changed as the loop iteration that is occurring. The function begins by initializing all the variables explained in our justification section above. The adversarial image is initialized as the original image before the perturbation loop begins. For each iteration of the loop, the new gradient is calculated to determine the direction pixels will change to maximize loss. The adversarial image is then updated to reflect the changed in the pixel for that specific iteration. The for loop will terminate when the finite number of iterations is reached as the index increases by the specified step size every iteration. Once the loop terminates, the adversarial image is returned with the changes to pixels based on the number of loop iterations. 
+
 
 %Grant - Particle Swarm
 
@@ -234,17 +273,45 @@ Ansah, H. (2023, April 21). Adversarial attacks on neural networks: Exploring th
 %walltime is actual time it takes to run, explain difference
 %sam
 To calculate runtime for an algorithm, we first identify the number of operations for each iteration of the algorithm. These operations can be arithmetic operations, comparisons, and assignment operations. We represent these as weights. Next, we determine a mathematical expression in relation to the input size, n.
-We then combine the weights, or number of operations, and multiply that by the mathematical expression that represents the time complexity.
-\newline \newline Walltime is a term that represents the real-time of an algorithm, in a linear sense. Start to stop, for simpler terms. Runtime, on the other hand, refers to the time it takes to execute the code or instructions, excluding the idle and/or waiting time. 
+We then combine the weights, or number of operations, and multiply that by the mathematical expression that represents the time complexity. Walltime is a term that represents the real-time of an algorithm, in a linear sense. Start to stop, for simpler terms. Runtime, on the other hand, refers to the time it takes to execute the code or instructions, excluding the idle and/or waiting time. 
 
 % Angelica - Deep Fool
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.55\textwidth, height=6cm]{deepfool_algorithm.png}
+\caption{Deep Fool Algorithm (Morgan \& Watson, 2022)}
+\label{fig:figure2}
+\end{center}
+\end{figure}
+
+For DeepFool, in terms of the time complexity, a FGSM is used to solve the linear optimization problem, which has a computational complexity of O(d), where d is the dimensionality of the input data. The overall time complexity of the DeepFool algorithm can be expressed as O(Td), where T is the number of iterations required to find an adversarial example. This means that the overall runtime complexity of the DeepFool algorithm is proportional to the number of iterations required to find an adversarial example, times the dimensionality of the input data.
+
+Although, the real runtime complexity of the algorithm will depend on factors such as, the size and complexity of the neural network being attacked, the dimensionality, complexity of the input, etc.
+
+This is the same for Walltime. It depends on the sam factors, so it is unable to tell how long it will run for. 
+
 
 %Alex - FGSM
 
 %Taylor - BIM
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.75\textwidth, height=5cm]{BIM_algorithm.png}
+\caption{BIM Algorithm (Wong et al., 2020)}
+\label{fig:figure2}
+\end{center}
+\end{figure}
 
+\tab The BIM algorithm will have a run time dependant on the FGSM run time. As seen in the figure above, BIM is composed of 2 for loops. The first loop run time will depend on the number of iterations determined from step size $\alpha$ and maximum perturbance $\epsilon$. The nested loop represents the FGSM algorithm that depends on the data set size for run time. Because of this structure, the run time complexity is in the order of $\theta$(n)=$n^2$. BIM run time will be an extension of FGSM run time by multiplying it by the number of iterations specified. 
 
 %Grant - Particle Swarm
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.5\textwidth, height=7.5cm]{particleswarm_algorithm.png}
+\caption{Particle Swarm Algorithm (ResearchGate, 2018)}
+\label{fig:figure2}
+\end{center}
+\end{figure}
 
 %Sam - Simulated Annealing 
 
@@ -254,6 +321,7 @@ We then combine the weights, or number of operations, and multiply that by the m
 %Taylor - outcome of testing blurry and color
 
 %Angelica - outcome of testing grayscale
+%idek how you would go about this
 
 
 \subsection{Combining Weights}
