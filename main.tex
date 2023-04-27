@@ -150,7 +150,6 @@ Because of the potential danger in many industries, defense against these attack
 \section{Algorithm explanations}
 %explain each algorithm goal/how it works
 %why you picked it (fast time, accuracy, etc)
-% loop invarient & runtime complexity -> IN APPENDIX, NOT THIS SECTION
 
 
 % selecting each of the 5 machine learning algorithms: how you trained them, and how your optimizer allocates the votes, and why such an approach should work
@@ -183,16 +182,10 @@ and random number  $r_{1}$, and a similar factor where the global best minus the
 We were able to isotropically blur the images with a certain standard deviation of the blur. As the image is blurred, the model is not always able to tell the contrast between the dandelion and surrounding grass, causing it to incorrectly classify the image. We also implemented a function to alter the image color channels. Since the grass and dandelion pictures obviously have a distinction in having the color yellow or not, changing color channels can aid in fooling the given model. By setting the green and blue channels to zero, the red channel is left. The attacked images then lack the zeroed channels, and the model has to focus on other image characteristics rather than the obvious color differences. Performance and effects can be found in the report Appendix.
 
 
-%Angelica - grayscale
-%%%%% ask someone to help me run it through the model
+%Grant - occlude
+Using occlusion, our group would set the value of random pixels in our image to 0/Black (the number of pixels that would be set would be the pixel budget, equal to the total number of pixels over 100) and then return that image to the main image. This could possibly block out some of the pixels that distinguish the grass and dandelions. This did not trick the image classifier if the original folder was grass and the accuracy was only slightly lowered from 99.829 to 99.784. However, when the dandelion folder was used, 4 images were tricked and the accuracy was lowered from 0.9856 to 0.9535.
 
 
-
-%need to ask Lucas how to interpret the results of running the test loop
-%occlude function does not trick or lower accuracy as of now
-%blurry function does not trick but lowers accuracy
-%add noise function does not trick but lowers accuracy (have ti add isoblur to it though)
-%color function drastically lowers accuracy percentage for dandelion pictures but not grass
 
 \section{Efficiency trade-off}
 %general discussion of efficiency vs quality inverse relationship
@@ -258,7 +251,10 @@ Correia, A. H. C., Worrall, D. E., &amp; Bondesan, R. (2022, March 4). Neural si
 
 % Angelica - Deep Fool
 
-%cannot do correcteness // talked about loops in explanation tho
+In Algorithm 1 of the DeepFool algorithm (Moosavi-Dezfooli,2016), the loop invariant is that the current image and the corresponding class label remain the same throughout each iteration in the loop. 
+The algorithm calculates the minimum number of perturbations required to move an input image from its current classification to a different one by approximating the decision boundary of the neural network at the current image.
+Then, the algorithm applies it to the input image by moving it in the direction of the calculated perturbation vector.
+Although, the current image and class label don't change during this process. The loop invariant ensures the algorithm is consistently working with the same input image and class label, and is able to generate adversarial examples that specifically fit to that input and label. 
 
 %Alex - FGSM
 
@@ -294,7 +290,7 @@ For DeepFool, in terms of the time complexity, a FGSM is used to solve the linea
 
 Although, the real runtime complexity of the algorithm will depend on factors such as, the size and complexity of the neural network being attacked, the dimensionality, complexity of the input, etc.
 
-This is the same for Walltime. It depends on the sam factors, so it is unable to tell how long it will run for. 
+This is the same for Walltime. It depends on the same factors, so it is unable to tell how long it will run for. 
 
 
 %Alex - FGSM
@@ -315,7 +311,7 @@ This is the same for Walltime. It depends on the sam factors, so it is unable to
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.5\textwidth, height=9cm]{A2.jpg}
+\includegraphics[width=0.3\textwidth, height=6cm]{A2.jpg}
 \caption{Particle Swarm Algorithm (Mun et al., 2022)}
 \label{fig:figure2}
 \end{center}
@@ -326,7 +322,7 @@ The run time of the algorithm highly depends on the number of specified iteratio
 %Sam - Simulated Annealing 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.5\textwidth, height=9cm]{SA1.png}
+\includegraphics[width=0.5\textwidth, height=8cm]{SA1.png}
 \caption{Simulated Annealing Algorithm (Mun et al., 2022)}
 \label{fig:figure2}
 \end{center}
@@ -336,15 +332,54 @@ The run time of the simulated annealing algorithm is dependent on the size and c
 
 
 \subsection{Performance}
+%Alex - comparison of algorithm pros vs. cons
+
+
 %before and after pictures
-
 %Taylor - outcome of testing blurry and color
+\begin{figure}[h]
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=0.6\linewidth, height=4.75cm]{orginal_dand.png} 
+\caption{Original Dandelion Photo}
+\label{fig:subim1}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=0.6\linewidth, height=4.75cm]{blurred_dand.png}
+\caption{Blurred Dandelion Photo}
+\label{fig:subim2}
+\end{subfigure}
 
-%Angelica - outcome of testing grayscale
-%idek how you would go about this
+\caption{Change in Image with Blur Function}
+\label{fig:image2}
+\end{figure}
+
+Because we could not fully implement the 5 algorithms we researched, we also looked into other ways to change photos. The figure above shows the change made with the blur function used from the imager library. We understand the adversarial attacks do not change the visual appearance of the photos to the human eye. However, the imager functions are able to fool the model by changing the image at a larger pixel budget. Research into this topic allowed us to run the model and understand the process of tricking it. The blur function tended to fool the model when dandelion photos were passed to it because the flower starts to blend in with the grass background. However, this is not the case when the model is given grass photos. The model is less likely fooled with grass photos, but its prediction accuracy percentage tends to decrease with the blur function applied. This is a downfall of the functions that change the visual appearance; they do not fool the model into believing something is there when it is not.
+
+\begin{figure}[h]
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=0.6\linewidth, height=4.75cm]{orginal_dand.png} 
+\caption{Original Dandelion Photo}
+\label{fig:subim1}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=0.6\linewidth, height=4.75cm]{color_dand.png}
+\caption{Altered Color Channel Dandelion Photo}
+\label{fig:subim2}
+\end{subfigure}
+
+\caption{Change in Image with Alter Color Function}
+\label{fig:image2}
+\end{figure}
+
+Another imager function used was setting the blue and green color channels to zero in order for the photo to appear with only red tones. Again, this tends to trick the model when dandelion photos are passed to the model because the flower contrast is less distinguishable from grass background. The model is not as fooled when passed grass photos, but the prediction accuracy lowers in the same fashion as the blur function explained above. These simply functions gave us insight into what kind of changes trick the model, even though they have lots of room for improvement. The 5 algorithms researched would perform better at subtly attacking the images and still fooling the model if fully implemented.  
+
+
+%Grant - outcome of testing occlusion
 
 
 \subsection{Combining Weights}
+
+% Sam & Angelica - overview of weighted classifiers
 
 %what the weightings would be when combined into 1 algorithm
 
