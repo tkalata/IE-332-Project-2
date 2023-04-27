@@ -235,6 +235,9 @@ Ansah, H. (2023, April 21). Adversarial attacks on neural networks: Exploring th
 
 Correia, A. H. C., Worrall, D. E., &amp; Bondesan, R. (2022, March 4). Neural simulated annealing. arXiv.org. Retrieved April 26, 2023, from https://arxiv.org/abs/2203.02201 
 
+LTS4. (2017, August 24). DeepFool/deepfool.py at master · LTS4/deepfool. GitHub. Retrieved April 27, 2023, from https://github.com/LTS4/DeepFool/blob/master/Python/deepfool.py 
+
+
 \end{verbatim}
 
 \begin{thebibliography}{4}
@@ -267,8 +270,7 @@ With Particle Swarm Optimization, the loop invariant is that SBP, or the swarm's
 
 
 %Sam - Simulated Annealing 
-
-
+The loop invariant in the simulated annealing algorithm is the candidate solution from the solution space. If the candidate solution is more optimal than the current solution, then the candidate will replace the current solution. The algorithm constantly searches for a better solution, gradually perturbing the current data, and will terminate once a maximum number of iterations has been met, or the algorithm has determined an optimal solution.
 \subsection{Runtime complexity/Walltime}
 %explanation of how to calculate runtime
 %runtime for each algorithm
@@ -294,6 +296,7 @@ This is the same for Walltime. It depends on the same factors, so it is unable t
 
 
 %Alex - FGSM
+\tab FGSM has a lower runtime complexity than most algorithms because it does not undergo an iterative process. FGSM gets most of its complexity from the calculation of the loss function. Therefore, the actual runtime complexity of FGSM is $\theta$(n)=n as it is only dependent on the input size.
 
 %Taylor - BIM
 \begin{figure}[h]
@@ -390,13 +393,12 @@ Another imager function used was setting the blue and green color channels to ze
 
 
 % Sam & Angelica - overview of weighted classifiers
-
-
+%takl about the weights
 
 5 different machine learning algorithms were used to independently try to fool the
 classifier, but these 5 algorithms will be placed within another algorithm that will be assigned weights. 
 For this, after DeepFool, BIM, Particle Swarm, Simulated Annealing have been generated independently, their performance in fooling the classifier would be evaluated. 
-Based on the results, a weighted majority classifier would be implemented to combine the results of the 5 algorithms. At this point, the weights for each algorithm would be unknown and would have to be determined through training. Evaluating the performance of the combined algorithm with different weight combinations would need to be done iteratively to acheive the assignment's specifications of the results fooling the provided image classifier with exactly a budget of P/100, for at least one image, where P is the number of pixels in the image, doing this in less than 10 seconds per image. The weight combination that resulted in the highest accuracy on the training set would be used for the final weighted classifier. 
+Based on the results, a weighted majority classifier would be implemented to combine the results of the 5 algorithms. At this point, the weights for each algorithm would be unknown and would have to be determined through training. Evaluating the performance of the combined algorithm with different weight combinations would need to be done iteratively to achieve the assignment's specifications of the results fooling the provided image classifier with exactly a budget of P/100, for at least one image, where P is the number of pixels in the image, doing this in less than 10 seconds per image. The weight combination that resulted in the highest accuracy on the training set would be used for the final weighted classifier. 
 Finally, the final weight combination would be used to evaluate the performance of the combined algorithm on a test set. This approach allows for the strengths of each algorithm to be combined to create the most effective attack against the classifier. 
 In conclusion, the use of a weighted majority classifier allows for the weights of the algorithms to be adjusted based on performance, ensuring that the best possible combination of algorithms is utilized.
 
