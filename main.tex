@@ -353,7 +353,9 @@ The run time of the simulated annealing algorithm is dependent on the size and c
 \label{fig:image2}
 \end{figure}
 \tab As touched on earlier in section 5 regarding efficiency, the most prevalent performance trade-off among the five different algorithms chosen was between computational complexity and accuracy of misclassification. Less computationally complex algorithms typically take less time to run; however, in exchange the ability to accurately trick the classifier tends to decrease. FGSM is a good example of this trade-off. Compared to the other algorithms, FGSM is less computationally extensive and therefore faster (Morgan, 2022). While we were not able to get our code to run, the speed of computation was an important factor considered as time is a constraint in the specifications for this project. Despite the quicker speed, FGSM has a worse performance record in that it has a lower rate of accuracy than the other algorithms. On the other hand, BIM and Deep Fool along with a greater computational complexity typically have better performance. While these algorithms run slower, they boast higher rates of accuracy in misclassification. Looking from the receiving end of an attack, in a report from Sandia National Laboratories comparing the capabilities of certain adversarial attacks, the performance of FGSM was over 30 percent less accurate in its attacks than more complex algorithms such as deep fool (Short et al., 2019). 
+
 \tab Another notable trade-off that typically couples performance is the level of noticeable perturbations in the image. Particle swarm illustrates this trade-off perfectly as it has a high performance level in terms of accuracy that competes with BIM and deep fool; however, the perturbations in the adversarial images are significant in comparison. This is an important factor of consideration as we have a pixel budget per project specifications. In FGSM and BIM, increasing the epsilon value or the scaling factor of the perturbations increases accuracy but in turn increases the amount of visually noticeable changes in the adversarial image (Yi et al., 2021). Comparatively deep fool has less noticeable perturbations with a higher level of accuracy; however, it is more complex. 
+
 \tab In sum between the five algorithms, there are trade-offs between accuracy, amount of perturbations, and computationally complexity, all of which are relevant factors in this project. In choosing five highly accurate algorithms, the computational complexity would likely increase greatly and go over the time budget or produce highly noticeable perturbations. The decision on how we would weight our five algorithms in an optimization function based on performance as well as the aforementioned factors is detailed in the ladder section.
 
 
@@ -384,9 +386,19 @@ Another imager function used was setting the blue and green color channels to ze
 
 \subsection{Combining Weights}
 
+
+
+
 % Sam & Angelica - overview of weighted classifiers
 
-%what the weightings would be when combined into 1 algorithm
+
+
+5 different machine learning algorithms were used to independently try to fool the
+classifier, but these 5 algorithms will be placed within another algorithm that will be assigned weights. 
+For this, after DeepFool, BIM, Particle Swarm, Simulated Annealing have been generated independently, their performance in fooling the classifier would be evaluated. 
+Based on the results, a weighted majority classifier would be implemented to combine the results of the 5 algorithms. At this point, the weights for each algorithm would be unknown and would have to be determined through training. Evaluating the performance of the combined algorithm with different weight combinations would need to be done iteratively to acheive the assignment's specifications of the results fooling the provided image classifier with exactly a budget of P/100, for at least one image, where P is the number of pixels in the image, doing this in less than 10 seconds per image. The weight combination that resulted in the highest accuracy on the training set would be used for the final weighted classifier. 
+Finally, the final weight combination would be used to evaluate the performance of the combined algorithm on a test set. This approach allows for the strengths of each algorithm to be combined to create the most effective attack against the classifier. 
+In conclusion, the use of a weighted majority classifier allows for the weights of the algorithms to be adjusted based on performance, ensuring that the best possible combination of algorithms is utilized.
 
 
 %\begin{figure}[h]
