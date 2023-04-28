@@ -1,0 +1,83 @@
+library(tidyverse)
+library(keras)
+library(tensorflow)
+library(reticulate)
+
+install_tensorflow(extra_packages="pillow")
+install_keras()
+
+setwd("C:/Users/15135/Downloads/IE332 Project 2")
+model<-load_model_tf("./dandelion_model")
+
+
+## FGSM
+
+library(torch)
+library(torchvision)
+
+
+#Create loss function
+res=c("","")
+f=list.files("./grass")
+loss_vec <- c()
+for (i in f){
+  test_image <- image_load(paste("./grass/",i,sep=""),
+                           target_size = c(224,224))
+  x <- image_to_array(test_image)
+  x <- array_reshape(x, c(1, dim(x)))
+  x <- x/255
+  
+  pred <- model %>% predict(x)
+  loss_vec[i] <- pred[1,1]
+}
+elements <- c(1:length(loss_vec))
+loss_mod <- lm(loss_vec ~ elements)
+
+## Create adversarial image
+attack_images <- function(x, label, epsilon, lossmodel){
+  
+  #convert label to torch tensor of shape
+  label <- torch.tensor(label)
+  
+  #Check input/label shape and size
+  assert(image.shape == torch.Size(c(1,2,224,224)))
+  assert(label.shape == torch.Size(c(1)))
+  
+  #initialize adversarial image
+  image_adver <- image.clone()
+  
+  #Find sign of gradient of loss
+  grad <- gradient(loss_mod(x), x)
+  sign_grad <- grad.sign()
+  #Create adversarial image by adjusting pixels of original image
+  perturbed_image <- x + (epsilon*sign_grad)
+  perturbed_image <- torch.clamp(perturbed_image, 0, 1)
+
+  reurn(perturbed_image)  
+}
+
+
+## TEST MODEL
+res=c("","")
+f=list.files("./grass")
+for (i in f){
+  test_image <- image_load(paste("./grass/",i,sep=""),
+                           target_size = c(224,224))
+  x <- image_to_array(test_image)
+  x <- array_reshape(x, c(1, dim(x)))
+  x <- x/255
+  
+  pred <- model %>% predict(x)
+  attack_images(x, label, 0.2, loss_mod)
+    
+  if(pred[1,2]<0.50){
+    print(i)
+  }
+  print(pred)
+}
+
+
+}
+
+
+%https://www.tensorflow.org/tutorials/generative/adversarial_fgsm
